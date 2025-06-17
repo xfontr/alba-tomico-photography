@@ -11,9 +11,9 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "test": "vitest . --watch=false --passWithNoTessts",
+    "test": "vitest . --watch=false --passWithNoTests",
     "test:dev": "vitest .",
-    "test:coverage": "vitest . --watch=false --coverage --passWithNoTessts",
+    "test:coverage": "vitest . --watch=false --coverage --passWithNoTests",
     "prepare": "husky"
   },
   "dependencies": {
