@@ -1,6 +1,3 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 # 🏷 Get current branch name
 local_branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
@@ -25,10 +22,10 @@ fi
 
 # ✅ Run test and lint
 printf "${CYAN}▶ Running tests...${RESET}"
-pnpm all:test || exit 1
+pnpm test || exit 1
 
 printf "${CYAN}▶ Running linter...${RESET}"
-pnpm all:lint || exit 1
+pnpm lint || exit 1
 
 printf "${GREEN}✓ All checks passed. Push approved.${RESET}\n"
 exit 0
