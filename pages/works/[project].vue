@@ -10,7 +10,7 @@ onMounted(async () => {
 
 <template>
   <section class="works">
-    <img v-for="{ alt, src } in images.list.value" :key="src" :src :alt />
+    <img v-for="{ alt, src } in images.list.value" :key="src" :src :alt >
   </section>
 </template>
 

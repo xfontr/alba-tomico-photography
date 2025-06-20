@@ -1,4 +1,4 @@
-import ImageKit from "imagekit";
+import type ImageKit from "imagekit";
 import type { Path } from "~/types/Path";
 
 const api = (imageKit: ImageKit) => {

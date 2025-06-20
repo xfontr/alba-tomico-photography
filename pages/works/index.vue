@@ -17,7 +17,7 @@ const frontImages = computed<Image[]>(() =>
 <template>
   <section class="works">
     <div v-for="{ alt, src, post } in frontImages" :key="src" :src :alt>
-      <NuxtLink :to="post"><img :src :alt /></NuxtLink>
+      <NuxtLink :to="post"><img :src :alt ></NuxtLink>
     </div>
   </section>
 </template>

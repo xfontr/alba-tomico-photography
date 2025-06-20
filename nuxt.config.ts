@@ -1,7 +1,9 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   devtools: { enabled: false },
-
+  typescript: {
+    typeCheck: true,
+  },
   modules: [
     "@nuxt/eslint",
     "@nuxt/fonts",

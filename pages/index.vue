@@ -25,7 +25,7 @@ onMounted(() => images.update("home"));
 
 <template>
   <section class="landing" @mousemove="onMouseMove">
-    <img class="landing__background" :src="image.src" :alt="image.alt" />
+    <img class="landing__background" :src="image.src" :alt="image.alt" >
   </section>
 </template>
 
