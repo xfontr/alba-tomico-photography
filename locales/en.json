@@ -4,5 +4,9 @@
   },
   "global": {
     "default_alt": "Photography by Alba Tomico"
+  },
+  "menu": {
+    "info": "INFO",
+    "menu": "MENU"
   }
 }
