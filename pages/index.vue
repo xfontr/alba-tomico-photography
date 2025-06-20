@@ -10,6 +10,7 @@ let lastChange = 0;
 
 const onMouseMove = (): void => {
   const now = Date.now();
+
   if (now - lastChange < THROTTLE) return;
 
   lastChange = now;
@@ -25,7 +26,9 @@ onMounted(() => images.update("home"));
 
 <template>
   <section class="landing" @mousemove="onMouseMove">
-    <img class="landing__background" :src="image.src" :alt="image.alt" >
+    <Menu>
+      <img class="landing__background" :src="image.src" :alt="image.alt"
+    /></Menu>
   </section>
 </template>
 
