@@ -2,23 +2,26 @@ import type {
   FileObject,
   ListFileResponse,
 } from "imagekit/dist/libs/interfaces";
-import { DEFAULT_LOCALE, FRONTAL_IMAGE } from "~/configs/contants";
+import { DEFAULT_LOCALE, FRONTAL_IMAGE } from "~/configs/constants";
 import type { FullImage, Image } from "~/types/Image";
 import type { Locale } from "~/types/Locale";
 
 const images = (locale: Locale) => {
   const { t } = useI18n();
 
-  const getImage = (file: FullImage): Image | undefined => {
+  const getImage = ({
+    customMetadata: meta,
+    ...file
+  }: FullImage): Image | undefined => {
     if (file.fileType !== "image") return;
 
-    const meta = file.customMetadata;
+    const alt: string =
+      meta?.[locale] ??
+      meta?.[DEFAULT_LOCALE] ??
+      (t("global.default_alt") as string);
 
     return {
-      alt:
-        meta?.[locale] ??
-        meta?.[DEFAULT_LOCALE] ??
-        (t("global.default_alt") as string),
+      alt,
       src: file.url,
       front: !!file.tags?.includes(FRONTAL_IMAGE),
       post: file.filePath.split("/").slice(0, -1).join("/"),
