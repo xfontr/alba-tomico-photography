@@ -11,6 +11,13 @@ export default defineNuxtConfig({
     "nuxt-i18n-micro",
   ],
 
+  css: ["./assets/index.scss"],
+  fonts: {
+    defaults: {
+      weights: [300, 600, 900],
+    },
+  },
+
   i18n: {
     locales: [{ code: "en", iso: "en-US", dir: "ltr" }],
     defaultLocale: "en",
