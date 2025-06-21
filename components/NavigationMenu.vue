@@ -1,28 +1,31 @@
 <script lang="ts" setup>
-import { addBrackets } from "#imports";
+import { addBrackets, closeMenu } from "#imports";
 import { MENU_ITEMS } from "~/configs/constants";
 
 const { t } = useI18n();
+
+const { isFullMenuOpen = false } = defineProps<{ isFullMenuOpen?: boolean }>();
 </script>
 
 <template>
   <nav class="navigation-menu">
-    <FullMenu :items="MENU_ITEMS">
-      <button type="button" class="navigation-menu__item">
-        {{ addBrackets(t("menu.menu") as string) }}
-      </button></FullMenu
-    >
-
-    <NuxtLink
-      to="/"
-      class="navigation-menu__item navigation-menu__item--center"
-    >
-      {{ addBrackets(t("meta.title") as string) }}
-    </NuxtLink>
-
-    <NuxtLink to="contact" class="navigation-menu__item">
+    <NuxtLink to="/contact" class="navigation-menu__item" @click="closeMenu">
       {{ addBrackets(t("menu.contact") as string) }}
     </NuxtLink>
+
+    <div class="navigation-menu__center">
+      <NuxtLink to="/" class="navigation-menu__item">
+        {{ addBrackets(t("meta.title") as string) }}
+      </NuxtLink>
+    </div>
+
+    <FullMenu :items="MENU_ITEMS" :disabled="isFullMenuOpen">
+      <button type="button" class="navigation-menu__item">
+        {{
+          addBrackets(t(`menu.${isFullMenuOpen ? "close" : "menu"}`) as string)
+        }}
+      </button></FullMenu
+    >
   </nav>
 </template>
 
@@ -40,15 +43,16 @@ const { t } = useI18n();
   &__item {
     font-size: $font-size-m;
     cursor: pointer;
+  }
 
-    &--center {
-      position: absolute;
-      width: 100%;
-      top: 0;
-      left: 0;
-      display: flex;
-      justify-content: center;
-    }
+  &__center {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: -1;
   }
 }
 </style>
