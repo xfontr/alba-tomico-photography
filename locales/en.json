@@ -5,14 +5,28 @@
   "global": {
     "default_alt": "Photography by Alba Tomico"
   },
+  "error": {
+    "not_found": "The frame is empty",
+    "in_progress": "Stay around, this will be ready soon enough",
+    "default": "Something went really, really wrong.",
+    "cta": "Don't worry — beauty is just one click away.",
+    "go_back_home": "Go back home"
+  },
+  "contact": {
+    "description": "FASHION & BEAUTY PHOTOGRAPHER",
+    "location": "BARCELONA/MILANO/ WORLDWIDE",
+    "contact": "Comissions and inquiries <a href='mailto:{email}'>{email}</a>",
+    "instagram": "@ALBATOMICO"
+  },
   "menu": {
-    "info_landing": "INFO",
+    "contact_landing": "CONTACT",
     "menu_landing": "MENU",
     "menu": "Menu",
     "contact": "Contact",
     "work": "Work",
     "editorial": "Editorial",
     "travel": "Travel",
-    "still_life": "Still life"
+    "still_life": "Still life",
+    "close": "Close"
   }
 }

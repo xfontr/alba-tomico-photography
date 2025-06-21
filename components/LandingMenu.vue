@@ -8,8 +8,8 @@ const { t } = useI18n();
   <slot />
 
   <nav class="landing-menu">
-    <NuxtLink to="info" class="landing-menu__item landing-menu__item--left">
-      {{ t("menu.info_landing") }}
+    <NuxtLink to="contact" class="landing-menu__item landing-menu__item--left">
+      {{ t("menu.contact_landing") }}
     </NuxtLink>
 
     <h1 class="landing-menu__heading">

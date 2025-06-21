@@ -45,6 +45,7 @@ export default defineNuxtConfig({
         publicKey: "",
         baseUrl: "",
       },
+      contact: "",
     },
   },
 });
