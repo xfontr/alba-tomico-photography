@@ -16,3 +16,15 @@ export type Image = {
   front: boolean;
   post: string;
 };
+
+export type ImageInstance = {
+  fillAlt: (locale: Locale, defaultText: string) => void;
+  image: Image;
+  isImage: boolean;
+};
+
+export type ImagesInstance = {
+  instances: ImageInstance[];
+  getImages: () => Image[];
+  fillAlts: (locale: Locale, defaultText: string) => void;
+};

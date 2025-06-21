@@ -1,6 +1,6 @@
 import type { Locale } from "~/types/Locale";
 import type { MenuItem } from "~/types/MenuItem";
-import type { Path } from "~/types/Path";
+import type { DynamicPath, Path, StaticPath } from "~/types/Path";
 
 export const DEFAULT_LOCALE: Locale = "en";
 
@@ -30,3 +30,6 @@ export const MENU_ITEMS: MenuItem[] = [
 ];
 
 export const VALID_PATHS: Path[] = ["home", "work", "editorial"];
+
+export const STATIC_VIEWS: StaticPath[] = ["home", "menu", "contact"];
+export const DYNAMIC_VIEWS: DynamicPath[] = ["work", "editorial"];
