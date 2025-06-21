@@ -11,7 +11,18 @@ export default defineNuxtConfig({
     "nuxt-i18n-micro",
   ],
 
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@use "./assets/_variables.scss" as *;',
+        },
+      },
+    },
+  },
+
   css: ["./assets/index.scss"],
+
   fonts: {
     defaults: {
       weights: [300, 600, 900],
