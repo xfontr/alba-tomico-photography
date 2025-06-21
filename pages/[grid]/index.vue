@@ -4,14 +4,22 @@ import type { Image } from "~/types/Image";
 const posts = usePosts();
 const images = useImages();
 const path = usePath();
+const { t } = useI18n();
 
-onMounted(async () => {
+await posts.update(path.current.value);
+await images.update(...posts.allPaths());
+
+onMounted(() => {
   if (!path.isValid.value) {
-    throw createError({ name: "Not found", statusCode: 404 });
+    throw createError({ statusCode: 404 });
   }
 
-  await posts.update(path.current.value);
-  await images.update(...posts.allPaths());
+  if (!images.list.value.length) {
+    throw createError({
+      statusMessage: t("error.in_progress") as string,
+      statusCode: 204,
+    });
+  }
 });
 
 const fronts = computed<Image[]>(() =>
@@ -42,28 +50,28 @@ const frontsWithEmptySpaces = computed<(Image | undefined)[]>(() => {
 </script>
 
 <template>
-  <section class="works">
+  <section v-if="images.list.value.length" class="repository">
     <div
       v-for="(front, key) in frontsWithEmptySpaces"
-      :key
-      :class="['works__work', { 'works__work--empty': !front }]"
+      :key="`item-${key}`"
+      class="repository__grid"
     >
-      <NuxtLink v-if="front" :to="front.post">
-        <img class="works__img" :src="front.src" :alt="front.alt" />
+      <NuxtLink v-if="front?.alt" :to="front.post">
+        <img class="repository__img" :src="front.src" :alt="front.alt" />
       </NuxtLink>
     </div>
   </section>
 </template>
 
 <style lang="scss" scoped>
-.works {
+.repository {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-auto-rows: 200px;
   row-gap: $distances-l;
   column-gap: $distances-s;
 
-  &__work {
+  &__grid {
     width: 100%;
     height: 100%;
     overflow: hidden;
