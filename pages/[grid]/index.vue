@@ -2,28 +2,29 @@
 import type { Image } from "~/types/Image";
 
 const posts = usePosts();
-const images = useImages();
+// const images = useImages();
 const path = usePath();
-const { t } = useI18n();
+// const { t } = useI18n();
 
 await posts.update(path.current.value);
-await images.update(...posts.allPaths());
+// await images.update(...posts.allPaths());
 
 onMounted(() => {
   if (!path.isValid.value) {
     throw createError({ statusCode: 404 });
   }
 
-  if (!images.list.value.length) {
-    throw createError({
-      statusMessage: t("error.in_progress") as string,
-      statusCode: 204,
-    });
-  }
+  // if (!images.list.value.length) {
+  //   throw createError({
+  //     statusMessage: t("error.in_progress") as string,
+  //     statusCode: 204,
+  //   });
+  // }
 });
 
 const fronts = computed<Image[]>(() =>
-  new Array(50).fill(images.list.value.filter(({ front }) => front)[0])
+  // new Array(50).fill(images.list.value.filter(({ front }) => front)[0])
+  []
 );
 
 const frontsWithEmptySpaces = computed<(Image | undefined)[]>(() => {
@@ -50,7 +51,7 @@ const frontsWithEmptySpaces = computed<(Image | undefined)[]>(() => {
 </script>
 
 <template>
-  <section v-if="images.list.value.length" class="repository">
+  <section class="repository">
     <div
       v-for="(front, key) in frontsWithEmptySpaces"
       :key="`item-${key}`"
