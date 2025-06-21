@@ -1,5 +1,6 @@
 import type { Locale } from "~/types/Locale";
 import type { MenuItem } from "~/types/MenuItem";
+import type { Path } from "~/types/Path";
 
 export const DEFAULT_LOCALE: Locale = "en";
 
@@ -27,3 +28,5 @@ export const MENU_ITEMS: MenuItem[] = [
     to: "/still-life",
   },
 ];
+
+export const VALID_PATHS: Path[] = ["home", "work"];

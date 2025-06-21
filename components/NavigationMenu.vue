@@ -13,7 +13,10 @@ const { t } = useI18n();
       </button></FullMenu
     >
 
-    <NuxtLink to="/" class="navigation-menu__item">
+    <NuxtLink
+      to="/"
+      class="navigation-menu__item navigation-menu__item--center"
+    >
       {{ addBrackets(t("meta.title") as string) }}
     </NuxtLink>
 
@@ -27,6 +30,7 @@ const { t } = useI18n();
 .navigation-menu {
   width: 100%;
 
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -36,6 +40,15 @@ const { t } = useI18n();
   &__item {
     font-size: $font-size-m;
     cursor: pointer;
+
+    &--center {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+    }
   }
 }
 </style>

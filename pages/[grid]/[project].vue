@@ -1,16 +1,17 @@
 <script lang="ts" setup>
+const path = usePath();
 const posts = usePosts();
 const images = useImages();
 
 onMounted(async () => {
-  await posts.update();
+  await posts.update(path.current.value);
   await images.update(...posts.allPaths());
 });
 </script>
 
 <template>
   <section class="works">
-    <img v-for="{ alt, src } in images.list.value" :key="src" :src :alt >
+    <img v-for="{ alt, src } in images.list.value" :key="src" :src :alt />
   </section>
 </template>
 
