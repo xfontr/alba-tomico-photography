@@ -9,6 +9,10 @@
     "info_landing": "INFO",
     "menu_landing": "MENU",
     "menu": "Menu",
-    "contact": "Contact"
+    "contact": "Contact",
+    "work": "Work",
+    "editorial": "Editorial",
+    "travel": "Travel",
+    "still_life": "Still life"
   }
 }

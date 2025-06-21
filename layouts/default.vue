@@ -4,6 +4,8 @@ definePageMeta({ layout: "canvas" });
 
 <template>
   <div class="main">
+    <div id="teleports" />
+
     <header>
       <NavigationMenu />
     </header>
