@@ -6,7 +6,9 @@
     "default_alt": "Photography by Alba Tomico"
   },
   "menu": {
-    "info": "INFO",
-    "menu": "MENU"
+    "info_landing": "INFO",
+    "menu_landing": "MENU",
+    "menu": "Menu",
+    "contact": "Contact"
   }
 }
