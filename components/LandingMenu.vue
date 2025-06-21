@@ -5,23 +5,23 @@ const { t } = useI18n();
 <template>
   <slot />
 
-  <div class="menu">
-    <NuxtLink to="" class="menu__item menu__item--left">
-      {{ t("menu.info") }}
+  <nav class="landing-menu">
+    <NuxtLink to="info" class="landing-menu__item landing-menu__item--left">
+      {{ t("menu.info_landing") }}
     </NuxtLink>
 
-    <h1 class="menu__heading">
+    <h1 class="landing-menu__heading">
       {{ t("meta.title") }}
     </h1>
 
-    <NuxtLink to="" class="menu__item menu__item--right">
-      {{ t("menu.menu") }}
-    </NuxtLink>
-  </div>
+    <button type="button" class="landing-menu__item landing-menu__item--right">
+      {{ t("menu.menu_landing") }}
+    </button>
+  </nav>
 </template>
 
 <style lang="scss" scoped>
-.menu {
+.landing-menu {
   position: absolute;
   inset: 0;
   width: 100vw;
@@ -35,7 +35,7 @@ const { t } = useI18n();
   color: white;
 
   &__item {
-    font-size: 1.25rem;
+    font-size: $font-size-m;
     cursor: pointer;
 
     &--left {
@@ -49,7 +49,7 @@ const { t } = useI18n();
 
   &__heading {
     text-transform: uppercase;
-    font-size: 4.5rem;
+    font-size: $font-size-xl;
     font-weight: 900;
   }
 }

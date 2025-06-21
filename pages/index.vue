@@ -5,6 +5,8 @@ const THROTTLE = 100;
 
 const images = useImages();
 
+definePageMeta({ layout: "canvas" });
+
 const location = ref<number>(0);
 let lastChange = 0;
 
@@ -26,22 +28,18 @@ onMounted(() => images.update("home"));
 
 <template>
   <section class="landing" @mousemove="onMouseMove">
-    <Menu>
+    <LandingMenu>
       <img class="landing__background" :src="image.src" :alt="image.alt"
-    ></Menu>
+    ></LandingMenu>
   </section>
 </template>
 
 <style lang="scss" scoped>
-.landing {
-  position: relative;
-
-  &__background {
-    position: absolute;
-    inset: 0;
-    height: 100vh;
-    width: 100vw;
-    object-fit: cover;
-  }
+.landing__background {
+  position: absolute;
+  inset: 0;
+  height: 100vh;
+  width: 100vw;
+  object-fit: cover;
 }
 </style>
