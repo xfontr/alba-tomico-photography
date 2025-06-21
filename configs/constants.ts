@@ -29,4 +29,4 @@ export const MENU_ITEMS: MenuItem[] = [
   },
 ];
 
-export const VALID_PATHS: Path[] = ["home", "work"];
+export const VALID_PATHS: Path[] = ["home", "work", "editorial"];

@@ -1,5 +1,6 @@
 <template>
   <main class="main">
+    <div id="teleports" />
     <slot />
   </main>
 </template>
