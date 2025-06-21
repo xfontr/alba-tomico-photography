@@ -1,12 +1,8 @@
-<script lang="ts" setup>
-definePageMeta({ layout: "canvas" });
-</script>
-
 <template>
   <div class="main">
     <div id="teleports" />
 
-    <header>
+    <header class="main__header">
       <NavigationMenu />
     </header>
 
@@ -19,5 +15,9 @@ definePageMeta({ layout: "canvas" });
 <style lang="scss" scoped>
 .main {
   padding: $distances-m;
+
+  &__header {
+    margin-bottom: $distances-l;
+  }
 }
 </style>
