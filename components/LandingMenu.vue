@@ -16,7 +16,7 @@ const { t } = useI18n();
       {{ t("meta.title") }}
     </h1>
 
-    <FullMenu :menu-items="MENU_ITEMS">
+    <FullMenu :items="MENU_ITEMS">
       <button
         type="button"
         class="landing-menu__item landing-menu__item--right"

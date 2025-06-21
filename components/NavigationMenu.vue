@@ -7,7 +7,7 @@ const { t } = useI18n();
 
 <template>
   <nav class="navigation-menu">
-    <FullMenu :menu-items="MENU_ITEMS">
+    <FullMenu :items="MENU_ITEMS">
       <button type="button" class="navigation-menu__item">
         {{ addBrackets(t("menu.menu") as string) }}
       </button></FullMenu
