@@ -1,1 +1,3 @@
-export type Path = ("home" | "work") | (string & NonNullable<unknown>);
+export type Path =
+  | ("home" | "work" | "editorial")
+  | (string & NonNullable<unknown>);
