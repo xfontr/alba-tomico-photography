@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { MENU_ITEMS } from "~/configs/constants";
+
 const { t } = useI18n();
 </script>
 
@@ -14,9 +16,14 @@ const { t } = useI18n();
       {{ t("meta.title") }}
     </h1>
 
-    <button type="button" class="landing-menu__item landing-menu__item--right">
-      {{ t("menu.menu_landing") }}
-    </button>
+    <FullMenu :menu-items="MENU_ITEMS">
+      <button
+        type="button"
+        class="landing-menu__item landing-menu__item--right"
+      >
+        {{ t("menu.menu_landing") }}
+      </button></FullMenu
+    >
   </nav>
 </template>
 
@@ -31,8 +38,8 @@ const { t } = useI18n();
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 2;
-  color: white;
+  z-index: $z-index-m;
+  color: $color-primary;
 
   &__item {
     font-size: $font-size-m;
@@ -49,7 +56,7 @@ const { t } = useI18n();
 
   &__heading {
     text-transform: uppercase;
-    font-size: $font-size-xl;
+    font-size: $font-size-xxl;
     font-weight: 900;
   }
 }
