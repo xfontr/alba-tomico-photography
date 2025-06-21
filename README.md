@@ -1,75 +1,23 @@
-# Nuxt Minimal Starter
+# Alba Tomico's Portfolio
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Data
 
-## Setup
+### Static
 
-Make sure to install dependencies:
+- home/ -> We expect an array of Images
+- contact/ -> We expect an array of 1 Image
+- menu/ -> We expect an array of Images
 
-```bash
-# npm
-npm install
+### Dynamic
 
-# pnpm
-pnpm install
+- editorial/ -> Array of Projects + each project has its own array of Images
+- work/ -> same
+- Any other else -> same
 
-# yarn
-yarn install
+### Must preload
 
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- home/ -> always
+- menu/ -> always
+- contact/ -> always
+- dynamic pages -> always
+- projects -> never
