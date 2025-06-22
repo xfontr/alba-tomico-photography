@@ -10,7 +10,8 @@ const Image = (file: FullImage): ImageInstance => {
     alt: "",
     src: file.url,
     front: !!file.tags?.includes(FRONTAL_IMAGE),
-    post: file.filePath?.split("/").slice(0, -1).join("/"),
+    post: file.filePath?.split("/").slice(0, -1).join("/").toLowerCase(),
+    name: new URL(file.url).pathname.split("/").at(-1)?.split(".")[0],
   };
 
   const fillAlt: ImageInstance["fillAlt"] = (locale, defaultText): void => {
@@ -21,7 +22,7 @@ const Image = (file: FullImage): ImageInstance => {
   };
 
   return {
-    image,
+    get: () => image,
     fillAlt,
     isImage: file.fileType === "image",
   };

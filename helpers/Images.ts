@@ -10,7 +10,7 @@ const Images = (list: ImageInstance[]): ImagesInstance => {
   };
 
   const getImages: ImagesInstance["getImages"] = () =>
-    instances.map(({ image }) => image);
+    instances.map(({ get }) => get());
 
   return { instances, fillAlts, getImages };
 };
