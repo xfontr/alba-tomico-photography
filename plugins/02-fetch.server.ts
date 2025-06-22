@@ -4,7 +4,7 @@ import Entries from "~/helpers/Entries";
 import Entry from "~/helpers/Entry";
 import Image from "~/helpers/Image";
 import Images from "~/helpers/Images";
-import useImageStore from "~/stores/images.store";
+import useContentStore from "~/stores/content.store";
 import type { Locale } from "~/types/Locale";
 import type { PredefinedPath } from "~/types/Path";
 
@@ -12,7 +12,7 @@ export default defineNuxtPlugin(async () => {
   const api = useApi();
   const { t, getLocale } = useI18n();
   const locale = getLocale() as Locale;
-  const store = useImageStore(usePinia());
+  const content = useContentStore(usePinia());
 
   const cache: Partial<Record<PredefinedPath, ListFileResponse>> = {};
 
@@ -30,22 +30,48 @@ export default defineNuxtPlugin(async () => {
 
   STATIC_VIEWS.forEach((view) => {
     const current = cache[view];
-
     if (!current) return;
 
-    const instances = Images(current.filter(isFileObject).map(Image));
-    instances.fillAlts(locale, t("global.default_alt") as string);
-    store.setView(view as PredefinedPath, instances.getImages());
+    const imgs = Images(current.filter(isFileObject).map(Image));
+    imgs.fillAlts(locale, t("global.default_alt") as string);
+
+    const entry = Entry({
+      folderPath: view,
+      name: view,
+      type: "folder",
+    });
+
+    entry.addChildren(...imgs.getImages());
+    content.setView(view, entry.get());
   });
 
-  DYNAMIC_VIEWS.forEach((view) => {
-    const current = cache[view];
+  await Promise.all(
+    DYNAMIC_VIEWS.map(async (view) => {
+      const current = cache[view];
+      if (!current) return;
 
-    if (!current) return;
+      const entries = Entries(current.filter(isFolderObject).map(Entry));
 
-    const { instances } = Entries(current.filter(isFolderObject).map(Entry));
-    store.setView(view as PredefinedPath, instances as any);
-  });
+      await Promise.all(
+        entries.instances.map(async (instance) => {
+          const files = await api.getPath(instance.get().path);
 
-  console.log(store.images);
+          const imgs = Images(files.filter(isFileObject).map(Image));
+          imgs.fillAlts(locale, t("global.default_alt") as string);
+
+          instance.addChildren(...imgs.getImages());
+        })
+      );
+
+      const mainEntry = Entry({
+        folderPath: view,
+        name: view,
+        type: "folder",
+      });
+
+      mainEntry.addChildren(...entries.getEntries());
+
+      content.setView(view, mainEntry.get());
+    })
+  );
 });
