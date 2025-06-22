@@ -15,4 +15,17 @@ export type Image = {
   alt: string;
   front: boolean;
   post: string;
+  name?: string;
+};
+
+export type ImageInstance = {
+  fillAlt: (locale: Locale, fallback: string) => void;
+  get: () => Image;
+  isImage: boolean;
+};
+
+export type ImagesInstance = {
+  instances: ImageInstance[];
+  getImages: () => Image[];
+  fillAlts: (locale: Locale, fallback: string) => void;
 };

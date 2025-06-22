@@ -1,16 +1,34 @@
 import { useRoute } from "vue-router";
 import { computed } from "vue";
-import { VALID_PATHS } from "../configs/constants";
-import type { Path } from "../types/Path";
+import type { DynamicPath, PredefinedPath } from "../types/Path";
+import { DYNAMIC_VIEWS, STATIC_VIEWS } from "~/configs/constants";
+
+const AVAILABLE_PATHS: PredefinedPath[] = [...DYNAMIC_VIEWS, ...STATIC_VIEWS];
 
 const usePath = () => {
   const route = useRoute();
 
-  const current = computed((): Path => route.path.replaceAll("/", ""));
+  const view = computed<PredefinedPath | undefined>(() => {
+    const current = route.path.split("/")[1] as PredefinedPath;
 
-  const isValid = computed(() => VALID_PATHS.includes(current.value));
+    if (AVAILABLE_PATHS.includes(current)) {
+      return current;
+    }
 
-  return { current, isValid };
+    return undefined;
+  });
+
+  const project = computed<string | undefined>(() => {
+    const current = route.path.split("/")[2];
+
+    if (!view.value || !DYNAMIC_VIEWS.includes(view.value as DynamicPath)) {
+      return undefined;
+    }
+
+    return current.toLowerCase();
+  });
+
+  return { view, project };
 };
 
 export default usePath;
