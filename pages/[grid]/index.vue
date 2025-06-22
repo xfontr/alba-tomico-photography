@@ -1,48 +1,50 @@
 <script lang="ts" setup>
+import useContentStore from "~/stores/content.store";
+import type { Entry } from "~/types/Entry";
 import type { Image } from "~/types/Image";
 
-const posts = usePosts();
-// const images = useImages();
-const path = usePath();
-// const { t } = useI18n();
+const content = useContentStore(usePinia());
 
-await posts.update(path.current.value);
-// await images.update(...posts.allPaths());
+const path = usePath();
+const { t } = useI18n();
 
 onMounted(() => {
-  if (!path.isValid.value) {
+  if (!path.view.value) {
     throw createError({ statusCode: 404 });
   }
 
-  // if (!images.list.value.length) {
-  //   throw createError({
-  //     statusMessage: t("error.in_progress") as string,
-  //     statusCode: 204,
-  //   });
-  // }
+  if (!fronts.value.length) {
+    throw createError({
+      statusMessage: t("error.in_progress") as string,
+      statusCode: 204,
+    });
+  }
 });
 
 const fronts = computed<Image[]>(() =>
-  // new Array(50).fill(images.list.value.filter(({ front }) => front)[0])
-  []
+  new Array(50)
+    .fill(
+      content.content[path.view.value!]?.children?.flatMap((child) =>
+        (child as Entry).children?.filter((image) => (image as Image).front)
+      )
+    )
+    .flat()
 );
 
 const frontsWithEmptySpaces = computed<(Image | undefined)[]>(() => {
   const result: (Image | undefined)[] = [];
-  const list = fronts.value;
 
   let i = 0;
-  while (i < list.length) {
+  while (i < fronts.value.length) {
     const roll = Math.random();
 
     if (roll < 0.3) {
       result.push(undefined);
     } else {
-      result.push(list[i]);
+      result.push(fronts.value[i]);
       i += 1;
     }
 
-    // Occasionally drop a black square *after* the image too
     if (Math.random() < 0.2) result.push(undefined);
   }
 
