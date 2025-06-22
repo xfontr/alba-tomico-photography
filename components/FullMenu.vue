@@ -1,26 +1,31 @@
 <script lang="ts" setup>
-import type { MenuItem } from "~/types/MenuItem";
+import useContentStore from "~/stores/content.store";
+import type { Image } from "~/types/Image";
+import type { MenuItems } from "~/types/MenuItem";
 
 const { disabled = false } = defineProps<{
-  items: MenuItem[];
+  items: MenuItems;
   disabled?: boolean;
 }>();
+
+const content = useContentStore(usePinia());
 
 const open = defineModel<boolean>({ default: false });
 
 const { t: i18n } = useI18n();
 
-const visibleImage = ref<string>();
+const visibleImage = ref<Image>();
+
+const t = (key: string): string =>
+  i18n(`menu.${key.split(" ").join("_")}`) as string;
 
 const onMouseEnter = (key: string): void => {
-  visibleImage.value = key;
+  visibleImage.value = getImg(key);
 };
 
 const onMouseLeave = (): void => {
-  visibleImage.value = undefined;
+  // visibleImage.value = undefined;
 };
-
-const t = (key: string): string => i18n(`menu.${key}`) as string;
 
 onMounted(() => {
   document.addEventListener("close-menu", () => {
@@ -36,6 +41,13 @@ const toggle = () => {
 
   open.value = !open.value;
 };
+
+const getImg = (key: string): Image | undefined =>
+  content.content.menu?.children?.find(
+    (img) => (img as Image).name === key
+  ) as Image;
+
+const toUrl = (key: string): string => key.split(" ").join("-");
 </script>
 
 <template>
@@ -51,18 +63,20 @@ const toggle = () => {
 
         <ul class="full-menu__list">
           <li
-            v-for="{ key, to, img: { alt, src } } in items"
+            v-for="key in items"
             :key
             class="full-menu__item"
             @mouseenter="onMouseEnter(key)"
             @mouseleave="onMouseLeave"
           >
-            <NuxtLink :to @click="open = false">{{ t(key) }}</NuxtLink>
+            <NuxtLink :to="toUrl(key)" @click="open = false">{{
+              t(key)
+            }}</NuxtLink>
             <img
-              v-show="visibleImage === key"
+              v-show="visibleImage?.name === key"
               class="full-menu__img"
-              :src
-              :alt
+              :src="visibleImage?.src"
+              :alt="visibleImage?.alt"
             />
           </li>
         </ul></section></Teleport
@@ -75,7 +89,7 @@ const toggle = () => {
   z-index: $z-index-l;
   background-color: $color-secondary;
 
-  position: absolute;
+  position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
@@ -93,12 +107,19 @@ const toggle = () => {
   }
 
   &__list {
+    position: relative;
     font-size: $font-size-xxl;
     font-weight: 900;
     text-align: center;
     display: flex;
     flex-direction: column;
     gap: $distances-m;
+  }
+
+  &__img {
+    position: absolute;
+    bottom: 50%;
+    right: -100%;
   }
 }
 </style>
