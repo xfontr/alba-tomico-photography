@@ -1,17 +1,19 @@
 <script lang="ts" setup>
-import useImageStore from "~/stores/images.store";
+import useContentStore from "~/stores/content.store";
 import type { Image } from "~/types/Image";
 
 const THROTTLE = 100;
 
-const store = useImageStore(usePinia());
+const content = useContentStore(usePinia());
 
 definePageMeta({ layout: "canvas" });
 
 const location = ref<number>(0);
 let lastChange = 0;
 
-const images = computed<Image[]>(() => store.images.home ?? []);
+const images = computed<Image[]>(
+  () => (content.content.home?.children as Image[]) ?? []
+);
 
 const onMouseMove = (): void => {
   if (!images.value.length) return;
