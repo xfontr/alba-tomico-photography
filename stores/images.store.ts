@@ -2,10 +2,10 @@ import type { Image } from "~/types/Image";
 import type { PredefinedPath } from "~/types/Path";
 
 const useImageStore = defineStore("images", () => {
-  const images = ref<Map<PredefinedPath, Image[]>>(new Map());
+  const images = ref<Partial<Record<PredefinedPath, Image[]>>>({});
 
   const setView = (key: PredefinedPath, list: Image[]) => {
-    images.value.set(key, list);
+    images.value[key] = list;
   };
 
   return { setView, images };

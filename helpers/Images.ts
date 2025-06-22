@@ -1,22 +1,16 @@
-import type { ListFileResponse } from "imagekit/dist/libs/interfaces";
-import Image from "./Image";
 import type { ImageInstance, ImagesInstance } from "~/types/Image";
-import { isFileObject } from "~/utils/imageKit";
 
-const Images = (list: ListFileResponse): ImagesInstance => {
-  const instances: ImageInstance[] = list
-    .filter(isFileObject)
-    .map(Image)
-    .filter(({ isImage }) => isImage);
+const Images = (list: ImageInstance[]): ImagesInstance => {
+  const instances: ImageInstance[] = list.filter(({ isImage }) => isImage);
 
-  const fillAlts: ImagesInstance["fillAlts"] = (locale, defaultText) => {
-    instances.map((image) => {
-      image.fillAlt(locale, defaultText);
+  const fillAlts: ImagesInstance["fillAlts"] = (locale, fallback) => {
+    instances.forEach(({ fillAlt }) => {
+      fillAlt(locale, fallback);
     });
   };
 
   const getImages: ImagesInstance["getImages"] = () =>
-    instances.map((instance) => instance.image);
+    instances.map(({ image }) => image);
 
   return { instances, fillAlts, getImages };
 };

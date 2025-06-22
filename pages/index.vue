@@ -11,7 +11,7 @@ definePageMeta({ layout: "canvas" });
 const location = ref<number>(0);
 let lastChange = 0;
 
-const images = computed<Image[]>(() => store.images.get("home") ?? []);
+const images = computed<Image[]>(() => store.images.home ?? []);
 
 const onMouseMove = (): void => {
   if (!images.value.length) return;

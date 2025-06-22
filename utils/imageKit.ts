@@ -18,3 +18,7 @@ export const imageKit = ({ baseUrl, id, privateKey, publicKey }: Configs) =>
 export const isFileObject = (
   file: FileObject | FolderObject
 ): file is FileObject => "fileId" in file;
+
+export const isFolderObject = (
+  file: FileObject | FolderObject
+): file is FolderObject => !("fileId" in file);

@@ -18,7 +18,7 @@ export type Image = {
 };
 
 export type ImageInstance = {
-  fillAlt: (locale: Locale, defaultText: string) => void;
+  fillAlt: (locale: Locale, fallback: string) => void;
   image: Image;
   isImage: boolean;
 };
@@ -26,5 +26,5 @@ export type ImageInstance = {
 export type ImagesInstance = {
   instances: ImageInstance[];
   getImages: () => Image[];
-  fillAlts: (locale: Locale, defaultText: string) => void;
+  fillAlts: (locale: Locale, fallback: string) => void;
 };
