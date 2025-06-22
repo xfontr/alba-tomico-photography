@@ -15,11 +15,12 @@ export type Image = {
   alt: string;
   front: boolean;
   post: string;
+  name?: string;
 };
 
 export type ImageInstance = {
   fillAlt: (locale: Locale, fallback: string) => void;
-  image: Image;
+  get: () => Image;
   isImage: boolean;
 };
 
