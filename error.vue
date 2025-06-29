@@ -6,10 +6,8 @@ const props = defineProps<{ error: NuxtError }>();
 
 const { t } = useI18n();
 
-const message = computed<string>(() =>
-  props.error.statusCode === 404
-    ? (t("error.not_found") as string)
-    : props.error.statusMessage ?? (t("error.default") as string)
+const message = computed<string>(
+  () => props.error.statusMessage ?? (t("error.default") as string)
 );
 </script>
 
@@ -58,6 +56,7 @@ const message = computed<string>(() =>
 
   &__name {
     font-size: $font-size-l;
+    text-align: center;
   }
 
   &__cta-text {
