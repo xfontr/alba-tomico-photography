@@ -4,16 +4,14 @@ import type { Image } from "~/types/Image";
 
 const THROTTLE = 100;
 
-const content = useContentStore(usePinia());
+const { getImages } = useContentStore(usePinia());
 
 definePageMeta({ layout: "canvas" });
 
 const location = ref<number>(0);
 let lastChange = 0;
 
-const images = computed<Image[]>(
-  () => (content.content.home?.children as Image[]) ?? []
-);
+const images = computed<Image[]>(() => getImages("home"));
 
 const onMouseMove = (): void => {
   if (!images.value.length) return;

@@ -1,12 +1,19 @@
 <script lang="ts" setup>
+import useContentStore from "~/stores/content.store";
+import type { Image } from "~/types/Image";
+
 const { t } = useI18n();
 const { contact } = useRuntimeConfig().public;
+
+const { getImages } = useContentStore(usePinia());
 
 const KEYS = ["description", "location", "contact", "instagram"];
 
 const textBlocks = KEYS.map(
   (block) => t(`contact.${block}`, { email: contact }) as string
 );
+
+const image = computed<Image>(() => getImages("contact")[0]);
 </script>
 
 <template>
@@ -14,6 +21,12 @@ const textBlocks = KEYS.map(
     <article class="contact__content">
       <p v-for="block in textBlocks" :key="block" v-html="block" />
     </article>
+    <img
+      v-if="image?.src"
+      class="contact__background"
+      :src="image.src"
+      :alt="image.alt"
+    />
   </div>
 </template>
 
@@ -36,6 +49,15 @@ const textBlocks = KEYS.map(
     color: $color-primary;
     text-align: center;
     font-size: $font-size-m;
+  }
+
+  &__background {
+    position: absolute;
+    inset: 0;
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    z-index: -1;
   }
 }
 </style>

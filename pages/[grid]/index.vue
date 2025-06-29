@@ -3,7 +3,6 @@ import * as d3 from "d3";
 import type { ImgHTMLAttributes } from "vue";
 import { CHAOTIC_VIEWS } from "~/configs/constants";
 import useContentStore from "~/stores/content.store";
-import type { Entry } from "~/types/Entry";
 import type { Image } from "~/types/Image";
 import type { DynamicPath } from "~/types/Path";
 
@@ -11,16 +10,12 @@ const baseSize = 150;
 const scaleRange: [number, number] = [1, 2.6];
 const margin = 60;
 
-const content = useContentStore(usePinia());
+const { getFolders } = useContentStore(usePinia());
 const path = usePath();
 
 const fronts = computed<Image[]>(() =>
-  new Array(50)
-    .fill(
-      content.content[path.view.value!]?.children?.flatMap((child) =>
-        (child as Entry).children?.filter((image) => (image as Image).front)
-      )
-    )
+  getFolders(path.view.value!)
+    ?.flatMap((child) => child.children?.filter(({ front }) => front))
     .flat()
 );
 
