@@ -6,6 +6,10 @@ export type Entry = {
   children?: (Entry | Image)[];
 };
 
+export interface EntryWithImages extends Entry {
+  children: Image[];
+}
+
 export type Entries = { instances: EntryInstance[]; getEntries: () => Entry[] };
 
 export type EntryInstance = {
