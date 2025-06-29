@@ -20,7 +20,7 @@ export const DYNAMIC_VIEWS: DynamicPath[] = [
   "still-life",
   "editorial",
 ];
-export const CHAOTIC_VIEWS: DynamicPath[] = ["work", "editorial", "still-life"];
+export const CHAOTIC_VIEWS: DynamicPath[] = ["editorial", "still-life"];
 export const AVAILABLE_PATHS: PredefinedPath[] = [
   ...DYNAMIC_VIEWS,
   ...STATIC_VIEWS,
