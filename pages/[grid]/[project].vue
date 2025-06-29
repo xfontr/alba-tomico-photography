@@ -5,6 +5,7 @@ import type { Entry } from "~/types/Entry";
 const content = useContentStore(usePinia());
 
 const current = ref();
+const container = ref<HTMLElement>();
 
 onMounted(() => {
   const { view, project } = usePath();
@@ -22,7 +23,24 @@ onMounted(() => {
 </script>
 
 <template>
-  <section>
-    <img v-for="{ alt, src } in current" :key="src" :src :alt />
+  <section ref="container" class="project">
+    <img
+      v-for="{ alt, src } in current"
+      :key="src"
+      class="project__img"
+      :src
+      :alt
+    />
   </section>
 </template>
+
+<style lang="scss" scoped>
+.project {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  height: 98.5vh;
+  gap: $distances-s;
+}
+</style>
