@@ -33,26 +33,24 @@ const { isFullMenuOpen = false } = defineProps<{ isFullMenuOpen?: boolean }>();
 .navigation-menu {
   width: 100%;
 
-  position: relative;
+  position: fixed;
+  padding: $distances-m;
+  inset: 0;
+  bottom: unset;
   display: flex;
   align-items: center;
   justify-content: space-between;
   z-index: $z-index-m;
   color: $color-primary;
+  mix-blend-mode: difference;
+  -webkit-text-fill-color: $color-primary;
 
   &__item {
     font-size: $font-size-m;
     cursor: pointer;
-  }
-
-  &__center {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: -1;
+    width: 80px;
+    overflow: visible;
+    text-wrap: nowrap;
   }
 }
 </style>

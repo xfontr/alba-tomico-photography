@@ -1,5 +1,11 @@
+<script lang="ts" setup>
+import { VueLenis } from "lenis/vue";
+</script>
+
 <template>
   <div class="main">
+    <VueLenis root />
+
     <div id="teleports" />
 
     <header class="main__header">

@@ -23,10 +23,6 @@ const onMouseEnter = (key: string): void => {
   visibleImage.value = getImg(key);
 };
 
-const onMouseLeave = (): void => {
-  // visibleImage.value = undefined;
-};
-
 onMounted(() => {
   document.addEventListener("close-menu", () => {
     open.value = false;
@@ -47,7 +43,7 @@ const getImg = (key: string): Image | undefined =>
     (img) => (img as Image).name === key
   ) as Image;
 
-const toUrl = (key: string): string => key.split(" ").join("-");
+const toUrl = (key: string): string => `/${key.split(" ").join("-")}`;
 </script>
 
 <template>
@@ -67,7 +63,6 @@ const toUrl = (key: string): string => key.split(" ").join("-");
             :key
             class="full-menu__item"
             @mouseenter="onMouseEnter(key)"
-            @mouseleave="onMouseLeave"
           >
             <NuxtLink :to="toUrl(key)" @click="open = false">{{
               t(key)

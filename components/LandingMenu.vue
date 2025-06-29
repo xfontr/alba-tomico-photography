@@ -58,6 +58,7 @@ const { t } = useI18n();
     text-transform: uppercase;
     font-size: $font-size-xxl;
     font-weight: 900;
+    text-align: center;
   }
 }
 </style>
