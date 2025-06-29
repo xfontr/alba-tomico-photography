@@ -13,7 +13,7 @@ export const MENU_ITEMS: MenuItems = [
   "still life",
 ];
 
-export const STATIC_VIEWS: StaticPath[] = ["home", "menu", "contact"];
+export const STATIC_VIEWS: StaticPath[] = ["home", "contact"];
 export const DYNAMIC_VIEWS: DynamicPath[] = [
   "work",
   "travel",

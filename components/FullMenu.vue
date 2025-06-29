@@ -2,6 +2,7 @@
 import useContentStore from "~/stores/content.store";
 import type { Image } from "~/types/Image";
 import type { MenuItems } from "~/types/MenuItem";
+import type { DynamicPath } from "~/types/Path";
 
 const { disabled = false } = defineProps<{
   items: MenuItems;
@@ -14,13 +15,20 @@ const open = defineModel<boolean>({ default: false });
 
 const { t: i18n } = useI18n();
 
-const visibleImage = ref<Image>();
+const currentHover = ref<DynamicPath>();
+const images = ref<Image[]>([]);
 
 const t = (key: string): string =>
   i18n(`menu.${key.split(" ").join("_")}`) as string;
 
 const onMouseEnter = (key: string): void => {
-  visibleImage.value = getImg(key);
+  currentHover.value = key as DynamicPath;
+  images.value = content.getFrontals(currentHover.value);
+};
+
+const onMouseLeave = () => {
+  // images.value = [];
+  // currentHover.value = undefined;
 };
 
 onMounted(() => {
@@ -38,12 +46,13 @@ const toggle = () => {
   open.value = !open.value;
 };
 
-const getImg = (key: string): Image | undefined =>
-  content.content.menu?.children?.find(
-    (img) => (img as Image).name === key
-  ) as Image;
-
 const toUrl = (key: string): string => `/${key.split(" ").join("-")}`;
+
+const close = () => {
+  setTimeout(() => {
+    open.value = false;
+  }, 150);
+};
 </script>
 
 <template>
@@ -63,16 +72,10 @@ const toUrl = (key: string): string => `/${key.split(" ").join("-")}`;
             :key
             class="full-menu__item"
             @mouseenter="onMouseEnter(key)"
+            @mouseleave="onMouseLeave"
           >
-            <NuxtLink :to="toUrl(key)" @click="open = false">{{
-              t(key)
-            }}</NuxtLink>
-            <img
-              v-show="visibleImage?.name === key"
-              class="full-menu__img"
-              :src="visibleImage?.src"
-              :alt="visibleImage?.alt"
-            />
+            <NuxtLink :to="toUrl(key)" @click="close">{{ t(key) }}</NuxtLink>
+            <SingleCarousel class="full-menu__img" :images />
           </li>
         </ul></section></Teleport
   ></ClientOnly>
@@ -113,8 +116,8 @@ const toUrl = (key: string): string => `/${key.split(" ").join("-")}`;
 
   &__img {
     position: absolute;
-    bottom: 50%;
-    right: -100%;
+    bottom: 60%;
+    right: -60%;
   }
 }
 </style>
