@@ -2,6 +2,7 @@
 import * as d3 from "d3";
 import type { ImgHTMLAttributes } from "vue";
 import { CHAOTIC_VIEWS } from "~/configs/constants";
+import { LAYOUT } from "~/configs/layout";
 import useContentStore from "~/stores/content.store";
 import type { Image } from "~/types/Image";
 import type { DynamicPath } from "~/types/Path";
@@ -23,19 +24,32 @@ const isChaoticView = computed<boolean>(() =>
   CHAOTIC_VIEWS.includes(path.view.value as DynamicPath)
 );
 
-const frontsWithEmptySpaces = computed<(Image | undefined)[]>(() => {
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!! AI GARBAGE CODE ALERT !!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+const frontsWithLayout = computed<(Image | undefined)[]>(() => {
+  const images = fronts.value;
   const result: (Image | undefined)[] = [];
-  let i = 0;
-  while (i < fronts.value.length) {
-    const roll = Math.random();
-    if (roll < 0.3) {
-      result.push(undefined);
+
+  let imageIndex = 0;
+  for (const slot of LAYOUT) {
+    if (slot === "img") {
+      if (imageIndex < images.length) {
+        result.push(images[imageIndex]);
+        imageIndex++;
+      } else {
+        break;
+      }
     } else {
-      result.push(fronts.value[i]);
-      i += 1;
+      if (imageIndex < images.length) {
+        result.push(undefined);
+      } else {
+        break;
+      }
     }
-    if (Math.random() < 0.2) result.push(undefined);
   }
+
   return result;
 });
 
@@ -73,15 +87,13 @@ const getPositions = (): Record<number, ImgHTMLAttributes["style"]> => {
   }) => {
     return () => {
       for (const node of nodes) {
-        const minX = margin;
         const maxX = width - node.width - margin;
-        const minY = margin;
         const maxY = height - node.height - margin;
 
-        if (node.x < minX) node.x = minX;
+        if (node.x < margin) node.x = margin;
         else if (node.x > maxX) node.x = maxX;
 
-        if (node.y < minY) node.y = minY;
+        if (node.y < margin) node.y = margin;
         else if (node.y > maxY) node.y = maxY;
       }
     };
@@ -98,19 +110,20 @@ const getPositions = (): Record<number, ImgHTMLAttributes["style"]> => {
       )
     )
     .force("bounding", forceBoundingBox({ width, height, margin }))
-    .velocityDecay(0.3)
+    .velocityDecay(0.5)
     .stop();
 
   for (let i = 0; i < 600; ++i) simulation.tick();
 
   const pos: Record<number, ImgHTMLAttributes["style"]> = {};
-  for (const node of nodes) {
-    pos[node.id] = {
+
+  for (const { id, y, x, width, height } of nodes) {
+    pos[id] = {
       position: "absolute",
-      top: `${node.y}px`,
-      left: `${node.x}px`,
-      width: `${node.width}px`,
-      height: `${node.height}px`,
+      top: `${y}px`,
+      left: `${x}px`,
+      width: `${width}px`,
+      height: `${height}px`,
     };
   }
 
@@ -129,7 +142,7 @@ onMounted(() => {
 <template>
   <section :class="['repository', { 'repository--chaotic': isChaoticView }]">
     <div
-      v-for="(front, key) in isChaoticView ? fronts : frontsWithEmptySpaces"
+      v-for="(front, key) in isChaoticView ? fronts : frontsWithLayout"
       :key="`item-${key}`"
       class="repository__grid"
       :style="getLocation(key)"
@@ -145,18 +158,32 @@ onMounted(() => {
 .repository {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  grid-auto-rows: 200px;
-  row-gap: $distances-l;
-  column-gap: $distances-s;
+  gap: $distances-s;
+
+  @media (max-width: 1280px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   &--chaotic {
-    display: block;
     position: relative;
   }
 
   &__grid {
     width: 100%;
-    height: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
   }
 
   &__img {

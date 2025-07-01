@@ -10,7 +10,7 @@ const Images = (list: ImageInstance[]): ImagesInstance => {
   };
 
   const getImages: ImagesInstance["getImages"] = () =>
-    instances.map(({ get }) => get());
+    instances.map(({ get }) => get()).sort((a, b) => a.index - b.index);
 
   return { instances, fillAlts, getImages };
 };

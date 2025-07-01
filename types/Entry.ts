@@ -3,6 +3,7 @@ import type { Image } from "./Image";
 export type Entry = {
   name: string;
   path: string;
+  index: number;
   children?: (Entry | Image)[];
 };
 

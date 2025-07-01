@@ -10,9 +10,12 @@ const Image = (file: FullImage): ImageInstance => {
     alt: "",
     src: file.url,
     front: !!file.tags?.includes(FRONTAL_IMAGE),
-    post: file.filePath?.split("/").slice(0, -1).join("/").toLowerCase(),
+    post: getRelativePath(file.filePath),
     name: new URL(file.url).pathname.split("/").at(-1)?.split(".")[0],
+    index: -1,
   };
+
+  image.index = getIndex(image.name);
 
   const fillAlt: ImageInstance["fillAlt"] = (locale, defaultText): void => {
     image.alt =
