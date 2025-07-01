@@ -23,12 +23,12 @@ const t = (key: string): string =>
 
 const onMouseEnter = (key: string): void => {
   currentHover.value = key as DynamicPath;
-  images.value = content.getFrontals(currentHover.value);
+  images.value = content.getFrontals(key as DynamicPath);
 };
 
 const onMouseLeave = () => {
-  // images.value = [];
-  // currentHover.value = undefined;
+  images.value = [];
+  currentHover.value = undefined;
 };
 
 onMounted(() => {
@@ -75,7 +75,12 @@ const close = () => {
             @mouseleave="onMouseLeave"
           >
             <NuxtLink :to="toUrl(key)" @click="close">{{ t(key) }}</NuxtLink>
-            <SingleCarousel class="full-menu__img" :images />
+            <SingleCarousel
+              v-if="currentHover === key"
+              class="full-menu__img"
+              :images
+              :style="{ right: getDistance(key) }"
+            />
           </li>
         </ul></section></Teleport
   ></ClientOnly>
@@ -105,19 +110,21 @@ const close = () => {
   }
 
   &__list {
-    position: relative;
     font-size: $font-size-xxl;
     font-weight: 900;
-    text-align: center;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: $distances-m;
+  }
+
+  &__item {
+    position: relative;
   }
 
   &__img {
     position: absolute;
-    bottom: 60%;
-    right: -60%;
+    bottom: -30%;
   }
 }
 </style>
