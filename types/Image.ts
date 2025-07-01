@@ -15,6 +15,7 @@ export type Image = {
   alt: string;
   front: boolean;
   post: string;
+  index: number;
   name?: string;
 };
 

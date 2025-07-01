@@ -9,9 +9,12 @@ type EntryData = {
 
 const Entry = (folder: EntryData): EntryInstance => {
   const entry: BaseEntry = {
-    name: folder.name.toLowerCase(),
+    name: getName(folder.name),
     path: folder.folderPath,
+    index: -1,
   };
+
+  entry.index = getIndex(entry.name);
 
   const addChildren: EntryInstance["addChildren"] = (...children) => {
     entry.children ??= [];

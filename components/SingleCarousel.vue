@@ -24,21 +24,21 @@ const disconnect = () => {
   location.value = -1;
 };
 
+const connect = () => {
+  location.value = 0;
+  animate();
+};
+
 onBeforeMount(disconnect);
 
-watch(
-  () => images,
-  (imgs) => {
-    console.log(imgs.length);
-    if (!imgs.length) {
-      disconnect();
-      return;
-    }
-
-    location.value = 0;
-    animate();
+onMounted(() => {
+  if (!images.length) {
+    disconnect();
+    return;
   }
-);
+
+  connect();
+});
 </script>
 
 <template>
