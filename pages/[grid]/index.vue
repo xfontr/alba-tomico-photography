@@ -70,19 +70,41 @@ const canZoom = computed<boolean>(() =>
   ZOOMABLE_VIEWS.includes(path.view.value!)
 );
 
+let observer: IntersectionObserver;
+
 onMounted(() => {
   if (isChaoticView.value) {
     const w = window.innerWidth;
     const h = (window.innerHeight * fronts.value.length) / (w < 480 ? 2.9 : 2);
     const baseSize = getResponsiveBaseSize();
     positions.value = generateMatterLayout(fronts.value, w, h, baseSize);
-    console.log("setting height to", h);
     document.body.style.height = h + "px";
+
+    observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.intersectionRatio > 0) {
+            entry.target.classList.add("in-view");
+          }
+        }
+      },
+      {
+        rootMargin: "0px",
+        threshold: 0.2,
+      }
+    );
+
+    setTimeout(() => {
+      let imgs = document.querySelectorAll(".repository__img-cover");
+      imgs = imgs.length ? imgs : document.querySelectorAll(".repository__img");
+      imgs.forEach((el) => observer.observe(el));
+    }, 150);
   }
 });
 
 onBeforeUnmount(() => {
   document.body.style.height = "fit-content";
+  observer.disconnect();
 });
 </script>
 
@@ -164,16 +186,26 @@ onBeforeUnmount(() => {
     object-fit: cover;
     display: block;
     position: relative;
+    transition: 0.3s;
 
     &--zoom {
       transition: transform 0.35s cubic-bezier(0.075, 0.82, 0.165, 1);
       will-change: transform;
       transform-origin: center;
     }
+
+    &.in-view {
+      transform: translateY(-100px);
+    }
   }
 
   &__img-cover {
     position: relative;
+    transition: 0.3s;
+
+    &.in-view {
+      transform: translateY(-100px);
+    }
 
     &::after {
       content: "";
