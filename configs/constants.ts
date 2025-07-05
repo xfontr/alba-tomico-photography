@@ -11,6 +11,7 @@ export const FRONTAL_IMAGE = "front";
  */
 
 export const MENU_ITEMS: MenuItems = [
+  "home",
   "work",
   "editorial",
   "travel",
