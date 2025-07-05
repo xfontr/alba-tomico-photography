@@ -10,7 +10,7 @@ export const MENU_ITEMS: MenuItems = [
   "work",
   "editorial",
   "travel",
-  "still life",
+  "still-life",
 ];
 
 export const STATIC_VIEWS: StaticPath[] = [
@@ -20,7 +20,7 @@ export const STATIC_VIEWS: StaticPath[] = [
   "travel",
 ];
 export const DYNAMIC_VIEWS: DynamicPath[] = ["work", "editorial"];
-export const CHAOTIC_VIEWS: PredefinedPath[] = ["still-life", "editorial"];
+export const CHAOTIC_VIEWS: PredefinedPath[] = ["travel", "editorial"];
 export const AVAILABLE_PATHS: PredefinedPath[] = [
   ...DYNAMIC_VIEWS,
   ...STATIC_VIEWS,

@@ -8,7 +8,7 @@ const { t } = useI18n();
   <slot />
 
   <nav class="landing-menu">
-    <NuxtLink to="contact" class="landing-menu__item landing-menu__item--left">
+    <NuxtLink to="contact" class="landing-menu__item">
       {{ t("menu.contact_landing") }}
     </NuxtLink>
 
@@ -17,10 +17,7 @@ const { t } = useI18n();
     </h1>
 
     <FullMenu :items="MENU_ITEMS">
-      <button
-        type="button"
-        class="landing-menu__item landing-menu__item--right"
-      >
+      <button type="button" class="landing-menu__item">
         {{ t("menu.menu_landing") }}
       </button></FullMenu
     >
@@ -44,14 +41,7 @@ const { t } = useI18n();
   &__item {
     font-size: $font-size-m;
     cursor: pointer;
-
-    &--left {
-      transform: rotate(90deg);
-    }
-
-    &--right {
-      transform: rotate(-90deg);
-    }
+    transform: rotate(90deg);
   }
 
   &__heading {
