@@ -16,7 +16,7 @@ onMounted(() => {
 
   current.value = (
     content.content[view.value]?.children?.find(
-      (entry) => (entry as Entry).name === project.value
+      (entry) => (entry as Entry).name === project.value?.split("-").join(" ")
     ) as Entry
   )?.children;
 });
@@ -48,7 +48,16 @@ onBeforeUnmount(() => {
   top: 0;
   left: 0;
   display: flex;
+  flex-direction: column;
   height: 98.5vh;
   gap: $distances-s;
+
+  &__img {
+    width: 100%;
+  }
+
+  @media (min-width: 500px) {
+    flex-direction: row;
+  }
 }
 </style>

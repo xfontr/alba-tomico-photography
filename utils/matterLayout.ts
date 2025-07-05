@@ -6,7 +6,7 @@ import Matter from "matter-js";
 import type { ImgHTMLAttributes } from "vue";
 import type { Image } from "~/types/Image";
 
-const SCALE_RANGE: [number, number] = [3.5, 4.5];
+const SCALE_RANGE: [number, number] = [3, 4];
 const MARGIN = 60;
 const BORDER_THICKNESS = 200;
 const SIM_STEPS = 600;
@@ -55,16 +55,22 @@ export function generateMatterLayout(
     ),
   ];
   World.add(engine.world, walls);
-  images.forEach((_, i) => {
+
+  images.forEach((image, i) => {
     const scale =
       Math.random() * (SCALE_RANGE[1] - SCALE_RANGE[0]) + SCALE_RANGE[0];
+    const aspectRatio =
+      image.naturalWidth && image.naturalHeight
+        ? image.naturalWidth / image.naturalHeight
+        : 3 / 4; // fallback aspect ratio
+
     const width = baseSize * scale;
-    const height = width * (Math.random() * 0.6 + 0.8);
+    const height = width / aspectRatio;
 
     const x =
       Math.random() * (screenW - width - MARGIN * 2) + MARGIN + width / 2;
 
-    const groupSize = baseSize === 80 ? 0.9 : 1.5;
+    const groupSize = baseSize === 80 ? 0.9 : 1;
     const verticalChunkHeight = baseSize * 3;
 
     const groupIndex = Math.floor(i / groupSize);
