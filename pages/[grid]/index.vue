@@ -5,23 +5,32 @@ import { CHAOTIC_VIEWS } from "~/configs/constants";
 import { LAYOUT } from "~/configs/layout";
 import useContentStore from "~/stores/content.store";
 import type { Image } from "~/types/Image";
-import type { DynamicPath } from "~/types/Path";
+import type { StaticPath } from "~/types/Path";
 
 const baseSize = 150;
 const scaleRange: [number, number] = [1, 2.6];
 const margin = 60;
 
-const { getFolders } = useContentStore(usePinia());
+const { content, getFolders } = useContentStore(usePinia());
 const path = usePath();
 
-const fronts = computed<Image[]>(() =>
-  getFolders(path.view.value!)
-    ?.flatMap((child) => child.children?.filter(({ front }) => front))
-    .flat()
-);
+const fronts = computed<Image[]>(() => {
+  const children = content[path.view.value!]?.children ?? [];
+  const isOnlyFrontals = !!(children[0] as Image)?.src;
+
+  if (!isOnlyFrontals) {
+    return (
+      getFolders(path.view.value!)
+        ?.flatMap((child) => child.children?.filter(({ front }) => front))
+        .flat() ?? []
+    );
+  }
+
+  return children as Image[];
+});
 
 const isChaoticView = computed<boolean>(() =>
-  CHAOTIC_VIEWS.includes(path.view.value as DynamicPath)
+  CHAOTIC_VIEWS.includes(path.view.value as StaticPath)
 );
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

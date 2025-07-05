@@ -13,14 +13,14 @@ export const MENU_ITEMS: MenuItems = [
   "still life",
 ];
 
-export const STATIC_VIEWS: StaticPath[] = ["home", "contact"];
-export const DYNAMIC_VIEWS: DynamicPath[] = [
-  "work",
-  "travel",
+export const STATIC_VIEWS: StaticPath[] = [
+  "home",
+  "contact",
   "still-life",
-  "editorial",
+  "travel",
 ];
-export const CHAOTIC_VIEWS: DynamicPath[] = ["editorial", "still-life"];
+export const DYNAMIC_VIEWS: DynamicPath[] = ["work", "editorial"];
+export const CHAOTIC_VIEWS: PredefinedPath[] = ["still-life", "editorial"];
 export const AVAILABLE_PATHS: PredefinedPath[] = [
   ...DYNAMIC_VIEWS,
   ...STATIC_VIEWS,
