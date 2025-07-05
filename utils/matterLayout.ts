@@ -70,7 +70,7 @@ export function generateMatterLayout(
     const x =
       Math.random() * (screenW - width - MARGIN * 2) + MARGIN + width / 2;
 
-    const groupSize = baseSize === 80 ? 0.9 : 1;
+    const groupSize = baseSize === 80 ? 0.5 : 1;
     const verticalChunkHeight = baseSize * 3;
 
     const groupIndex = Math.floor(i / groupSize);

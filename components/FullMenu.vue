@@ -121,12 +121,16 @@ body[data-theme="invert"] .full-menu {
   }
 
   &__list {
-    font-size: $font-size-xxl;
     font-weight: 900;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: $distances-m;
+    font-size: $font-size-xl;
+
+    @media (min-width: 500px) {
+      font-size: $font-size-xxl;
+    }
   }
 
   &__item {
