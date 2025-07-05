@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { ImgHTMLAttributes } from "vue";
-import { CHAOTIC_VIEWS } from "~/configs/constants";
+import { CHAOTIC_VIEWS, ZOOMABLE_VIEWS } from "~/configs/constants";
 import { LAYOUT } from "~/configs/layout";
 import useContentStore from "~/stores/content.store";
 import type { Image } from "~/types/Image";
@@ -27,6 +27,15 @@ const fronts = computed<Image[]>(() => {
 const isChaoticView = computed<boolean>(() =>
   CHAOTIC_VIEWS.includes(path.view.value as StaticPath)
 );
+
+const getResponsiveBaseSize = (): number => {
+  const width = window.innerWidth;
+  if (width < 480) return 80; // mobile
+  if (width < 768) return 100; // small tablets
+  if (width < 1024) return 120; // medium
+  if (width < 1280) return 135; // large
+  return 150; // desktop+
+};
 
 const frontsWithLayout = computed<(Image | undefined)[]>(() => {
   const images = fronts.value;
@@ -57,12 +66,16 @@ const positions = ref<Record<number, ImgHTMLAttributes["style"]>>({});
 
 const getLocation = (index: number) => positions.value[index] || {};
 
+const canZoom = computed<boolean>(() =>
+  ZOOMABLE_VIEWS.includes(path.view.value!)
+);
+
 onMounted(() => {
-  console.log(isChaoticView.value);
   if (isChaoticView.value) {
     const w = window.innerWidth;
     const h = (window.innerHeight * fronts.value.length) / 2;
-    positions.value = generateMatterLayout(fronts.value, w, h);
+    const baseSize = getResponsiveBaseSize();
+    positions.value = generateMatterLayout(fronts.value, w, h, baseSize);
   }
 });
 </script>
@@ -73,7 +86,7 @@ onMounted(() => {
       <div
         v-for="(front, key) in isChaoticView ? fronts : frontsWithLayout"
         :key="`item-${key}`"
-        class="repository__grid"
+        :class="['repository__grid', { 'repository__grid--zoom': canZoom }]"
       >
         <NuxtLink v-if="front?.alt && front.front" :to="front.post">
           <div class="repository__img-cover" :style="getLocation(key)">
@@ -86,7 +99,7 @@ onMounted(() => {
         <img
           v-else-if="front?.alt"
           :style="getLocation(key)"
-          class="repository__img"
+          :class="['repository__img', { 'repository__img--zoom': canZoom }]"
           :src="front.src"
           :alt="front.alt"
         /></div
@@ -123,14 +136,34 @@ onMounted(() => {
   &__grid {
     width: 100%;
     aspect-ratio: 3 / 4;
+    z-index: 0;
     overflow: hidden;
+
+    &:hover {
+      z-index: 10;
+    }
+
+    &:hover .repository__img--zoom {
+      transform: scale(2.2);
+    }
+
+    &--zoom {
+      overflow: visible;
+    }
   }
 
   &__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
     position: relative;
+
+    &--zoom {
+      transition: transform 0.35s cubic-bezier(0.075, 0.82, 0.165, 1);
+      will-change: transform;
+      transform-origin: center;
+    }
   }
 
   &__img-cover {

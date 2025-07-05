@@ -15,10 +15,24 @@ const useContentStore = defineStore("content", () => {
   const getFolders = (key: PredefinedPath): EntryWithImages[] =>
     (content.value[key]?.children ?? []) as EntryWithImages[];
 
-  const getFrontals = (key: DynamicPath) =>
+  const getFrontals = (key: DynamicPath) => {
+    const children = content.value[key]?.children ?? [];
+    const isOnlyFrontals = !!(children[0] as Image)?.src;
+
+    if (!isOnlyFrontals) {
+      return (
+        getFolders(key)
+          ?.flatMap((child) => child.children?.filter(({ front }) => front))
+          .flat() ?? []
+      );
+    }
+
+    return children as Image[];
+
     getFolders(key)?.flatMap(
       (child) => child.children?.filter(({ front }) => front) ?? []
     );
+  };
 
   return { setView, getFrontals, getFolders, getImages, content };
 });

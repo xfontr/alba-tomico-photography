@@ -6,7 +6,6 @@ import Matter from "matter-js";
 import type { ImgHTMLAttributes } from "vue";
 import type { Image } from "~/types/Image";
 
-const BASE_SIZE = 150;
 const SCALE_RANGE: [number, number] = [3.5, 4.5];
 const MARGIN = 60;
 const BORDER_THICKNESS = 200;
@@ -15,7 +14,8 @@ const SIM_STEPS = 600;
 export function generateMatterLayout(
   images: Image[],
   screenW: number,
-  screenH: number
+  screenH: number,
+  baseSize: number
 ): Record<number, ImgHTMLAttributes["style"]> {
   const { Engine, World, Bodies } = Matter;
   const engine = Engine.create();
@@ -58,14 +58,14 @@ export function generateMatterLayout(
   images.forEach((_, i) => {
     const scale =
       Math.random() * (SCALE_RANGE[1] - SCALE_RANGE[0]) + SCALE_RANGE[0];
-    const width = BASE_SIZE * scale;
+    const width = baseSize * scale;
     const height = width * (Math.random() * 0.6 + 0.8);
 
     const x =
       Math.random() * (screenW - width - MARGIN * 2) + MARGIN + width / 2;
 
-    const groupSize = 1;
-    const verticalChunkHeight = 350;
+    const groupSize = 1.5;
+    const verticalChunkHeight = baseSize * 3;
 
     const groupIndex = Math.floor(i / groupSize);
     const yMin = groupIndex * verticalChunkHeight;
