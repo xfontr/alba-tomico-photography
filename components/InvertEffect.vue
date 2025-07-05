@@ -14,7 +14,7 @@ const effect = useEffectStore(usePinia());
 .invert-effect {
   position: fixed;
   inset: 0;
-  z-index: 99;
+  z-index: $z-index-xxl;
   height: 100vh;
   width: 100vw;
   pointer-events: none;
@@ -30,7 +30,7 @@ const effect = useEffectStore(usePinia());
     align-items: center;
     height: 44px;
     width: 44px;
-    z-index: 11;
+    z-index: $z-index-xl;
     position: absolute;
     bottom: 1.5rem;
     right: 2rem;

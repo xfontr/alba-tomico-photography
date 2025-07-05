@@ -20,6 +20,14 @@ onMounted(() => {
     ) as Entry
   )?.children;
 });
+
+onMounted(() => {
+  document.body.style.height = container.value?.clientHeight + "px";
+});
+
+onBeforeUnmount(() => {
+  document.body.style.height = "fit-content";
+});
 </script>
 
 <template>
