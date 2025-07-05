@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+import { VueLenis } from "lenis/vue";
+</script>
+
 <template>
-  <NuxtLayout><NuxtPage /></NuxtLayout>
+  <NuxtLayout> <InvertEffect /> <VueLenis root /><NuxtPage /> </NuxtLayout>
 </template>

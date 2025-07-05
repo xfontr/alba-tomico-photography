@@ -1,11 +1,5 @@
-<script lang="ts" setup>
-import { VueLenis } from "lenis/vue";
-</script>
-
 <template>
   <div class="main">
-    <VueLenis root />
-
     <div id="teleports" />
 
     <header class="main__header">
@@ -19,6 +13,11 @@ import { VueLenis } from "lenis/vue";
 </template>
 
 <style lang="scss" scoped>
+body[data-theme="invert"] .main {
+  color: $color-secondary;
+  background-color: $color-primary;
+}
+
 .main {
   padding: $distances-m;
 
