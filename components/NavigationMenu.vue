@@ -20,7 +20,10 @@ const { isFullMenuOpen = false } = defineProps<{ isFullMenuOpen?: boolean }>();
     </div>
 
     <FullMenu :items="MENU_ITEMS" :disabled="isFullMenuOpen">
-      <button type="button" class="navigation-menu__item">
+      <button
+        type="button"
+        class="navigation-menu__item navigation-menu__item--right"
+      >
         {{
           addBrackets(t(`menu.${isFullMenuOpen ? "close" : "menu"}`) as string)
         }}
@@ -48,9 +51,21 @@ const { isFullMenuOpen = false } = defineProps<{ isFullMenuOpen?: boolean }>();
   &__item {
     font-size: $font-size-m;
     cursor: pointer;
-    width: 80px;
+    width: 120px;
     overflow: visible;
     text-wrap: nowrap;
+
+    &--right {
+      text-align: right;
+    }
+  }
+
+  &__center {
+    display: none;
+
+    @media (min-width: 500px) {
+      display: block;
+    }
   }
 }
 </style>

@@ -50,9 +50,13 @@ body[data-theme="invert"] .landing-menu {
 
   &__heading {
     text-transform: uppercase;
-    font-size: $font-size-xxl;
     font-weight: 900;
     text-align: center;
+    font-size: $font-size-xl;
+
+    @media (min-width: 500px) {
+      font-size: $font-size-xxl;
+    }
   }
 }
 </style>

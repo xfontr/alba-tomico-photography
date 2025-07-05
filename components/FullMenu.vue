@@ -47,7 +47,10 @@ const toggle = () => {
   open.value = !open.value;
 };
 
-const toUrl = (key: string): string => `/${key.split(" ").join("-")}`;
+const toUrl = (key: string): string => {
+  if (key === "home") return "/";
+  return `/${key.split(" ").join("-")}`;
+};
 
 const close = () => {
   setTimeout(() => {
@@ -72,6 +75,7 @@ const close = () => {
           <li
             v-for="key in items"
             :key
+            :class="{ 'home-link': key === 'home' }"
             class="full-menu__item"
             @mouseenter="onMouseEnter(key)"
             @mouseleave="onMouseLeave"
@@ -132,6 +136,14 @@ body[data-theme="invert"] .full-menu {
   &__img {
     position: absolute;
     bottom: -30%;
+  }
+}
+
+.home-link {
+  display: block;
+
+  @media (min-width: 500px) {
+    display: none;
   }
 }
 </style>

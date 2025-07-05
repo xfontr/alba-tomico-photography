@@ -73,7 +73,7 @@ const canZoom = computed<boolean>(() =>
 onMounted(() => {
   if (isChaoticView.value) {
     const w = window.innerWidth;
-    const h = (window.innerHeight * fronts.value.length) / 2;
+    const h = (window.innerHeight * fronts.value.length) / (w < 480 ? 2.9 : 2);
     const baseSize = getResponsiveBaseSize();
     positions.value = generateMatterLayout(fronts.value, w, h, baseSize);
     console.log("setting height to", h);
@@ -145,15 +145,15 @@ onBeforeUnmount(() => {
     z-index: 0;
     overflow: hidden;
 
-    &:hover {
-      z-index: 10;
-    }
-
     &:hover .repository__img--zoom {
       transform: scale(2.2);
     }
 
     &--zoom {
+      &:hover {
+        z-index: 10;
+      }
+
       overflow: visible;
     }
   }
@@ -183,6 +183,7 @@ onBeforeUnmount(() => {
     }
 
     &:hover::after {
+      -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
     }
 
