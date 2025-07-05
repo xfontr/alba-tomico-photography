@@ -34,6 +34,7 @@ const onMouseLeave = () => {
 onMounted(() => {
   document.addEventListener("close-menu", () => {
     open.value = false;
+    currentHover.value = undefined;
   });
 });
 
@@ -50,6 +51,7 @@ const toUrl = (key: string): string => `/${key.split(" ").join("-")}`;
 
 const close = () => {
   setTimeout(() => {
+    currentHover.value = undefined;
     open.value = false;
   }, 150);
 };
@@ -87,6 +89,11 @@ const close = () => {
 </template>
 
 <style lang="scss" scoped>
+body[data-theme="invert"] .full-menu {
+  color: $color-secondary;
+  background-color: $color-primary;
+}
+
 .full-menu {
   color: $color-primary;
   z-index: $z-index-l;

@@ -32,7 +32,7 @@ const image = computed<Image>(() => getImages("contact")[0]);
 
 <style lang="scss" scoped>
 .contact {
-  position: absolute;
+  position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;

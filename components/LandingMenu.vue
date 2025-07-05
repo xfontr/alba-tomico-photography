@@ -25,6 +25,10 @@ const { t } = useI18n();
 </template>
 
 <style lang="scss" scoped>
+body[data-theme="invert"] .landing-menu {
+  color: $color-secondary;
+}
+
 .landing-menu {
   position: absolute;
   inset: 0;
