@@ -10,7 +10,7 @@ const Image = (file: FullImage): ImageInstance => {
     alt: "",
     src: file.url,
     front: !!file.tags?.includes(FRONTAL_IMAGE),
-    post: getRelativePath(file.filePath),
+    post: getRelativePath(file.filePath).split(" ").join("-"),
     name: new URL(file.url).pathname.split("/").at(-1)?.split(".")[0],
     index: -1,
   };
