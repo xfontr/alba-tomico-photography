@@ -28,10 +28,6 @@ const useContentStore = defineStore("content", () => {
     }
 
     return children as Image[];
-
-    getFolders(key)?.flatMap(
-      (child) => child.children?.filter(({ front }) => front) ?? []
-    );
   };
 
   return { setView, getFrontals, getFolders, getImages, content };
