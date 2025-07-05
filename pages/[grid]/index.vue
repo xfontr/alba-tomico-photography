@@ -76,11 +76,12 @@ onMounted(() => {
     const h = (window.innerHeight * fronts.value.length) / 2;
     const baseSize = getResponsiveBaseSize();
     positions.value = generateMatterLayout(fronts.value, w, h, baseSize);
+    console.log("setting height to", h);
     document.body.style.height = h + "px";
   }
 });
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
   document.body.style.height = "fit-content";
 });
 </script>
