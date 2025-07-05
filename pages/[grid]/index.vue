@@ -1,10 +1,14 @@
 <script lang="ts" setup>
 import type { ImgHTMLAttributes } from "vue";
-import { CHAOTIC_VIEWS, ZOOMABLE_VIEWS } from "~/configs/constants";
+import {
+  AVAILABLE_PATHS,
+  CHAOTIC_VIEWS,
+  ZOOMABLE_VIEWS,
+} from "~/configs/constants";
 import { LAYOUT } from "~/configs/layout";
 import useContentStore from "~/stores/content.store";
 import type { Image } from "~/types/Image";
-import type { StaticPath } from "~/types/Path";
+import type { PredefinedPath, StaticPath } from "~/types/Path";
 
 const { content, getFolders } = useContentStore(usePinia());
 const path = usePath();
@@ -72,8 +76,33 @@ const canZoom = computed<boolean>(() =>
 
 let observer: IntersectionObserver;
 
-onMounted(() => {
+onMounted(async () => {
+  if (!AVAILABLE_PATHS.includes(path.view.value as PredefinedPath)) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: useI18n().t("error.not_found") as string,
+    });
+  }
+
   if (isChaoticView.value) {
+    const preloadImages = async (images: Image[]) => {
+      await Promise.all(
+        images.map((img) => {
+          return new Promise((resolve) => {
+            const el = new Image();
+            el.onload = () => {
+              img.naturalWidth = el.naturalWidth;
+              img.naturalHeight = el.naturalHeight;
+              resolve(true);
+            };
+            el.src = img.src;
+          });
+        })
+      );
+    };
+
+    await preloadImages(fronts.value);
+
     const w = window.innerWidth;
     const h = (window.innerHeight * fronts.value.length) / (w < 480 ? 2.9 : 2);
     const baseSize = getResponsiveBaseSize();
@@ -104,7 +133,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   document.body.style.height = "fit-content";
-  observer.disconnect();
+  observer?.disconnect?.();
 });
 </script>
 
@@ -116,10 +145,21 @@ onBeforeUnmount(() => {
         :key="`item-${key}`"
         :class="['repository__grid', { 'repository__grid--zoom': canZoom }]"
       >
-        <NuxtLink v-if="front?.alt && front.front" :to="front.post">
+        <NuxtLink
+          v-if="front?.alt && front.front"
+          class="repository__link"
+          :to="front.post"
+        >
           <div class="repository__img-cover" :style="getLocation(key)">
             <h4 class="repository__img-title">
-              {{ front.post.split("/").at(-1)?.toLocaleUpperCase() }}
+              {{
+                front.post
+                  .split("/")
+                  .at(-1)
+                  ?.toLocaleUpperCase()
+                  .split("-")
+                  .join(" ")
+              }}
             </h4>
             <img class="repository__img" :src="front.src" :alt="front.alt" />
           </div>
@@ -166,12 +206,17 @@ onBeforeUnmount(() => {
     aspect-ratio: 3 / 4;
     z-index: 0;
     overflow: hidden;
+    pointer-events: none;
 
     &:hover .repository__img--zoom {
       transform: scale(2.2);
+      outline: none;
+      border: 1px solid #000;
     }
 
     &--zoom {
+      pointer-events: all;
+
       &:hover {
         z-index: 10;
       }
@@ -190,13 +235,22 @@ onBeforeUnmount(() => {
 
     &--zoom {
       transition: transform 0.35s cubic-bezier(0.075, 0.82, 0.165, 1);
+      transition: border 0;
+      transition: outline 0;
       will-change: transform;
       transform-origin: center;
+
+      outline: 1px solid #000;
+      border: none;
     }
 
     &.in-view {
       transform: translateY(-100px);
     }
+  }
+
+  &__link {
+    pointer-events: all;
   }
 
   &__img-cover {

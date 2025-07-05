@@ -17,6 +17,8 @@ export type Image = {
   post: string;
   index: number;
   name?: string;
+  naturalHeight?: number;
+  naturalWidth?: number;
 };
 
 export type ImageInstance = {
