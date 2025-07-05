@@ -1,5 +1,5 @@
-export type StaticPath = "home" | "contact";
-export type DynamicPath = "work" | "editorial" | "still-life" | "travel";
+export type StaticPath = "home" | "contact" | "still-life" | "travel";
+export type DynamicPath = "work" | "editorial";
 
 export type PredefinedPath = StaticPath | DynamicPath;
 
