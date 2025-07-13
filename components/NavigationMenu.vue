@@ -5,9 +5,13 @@ import { MENU_ITEMS } from "~/configs/constants";
 const { t } = useI18n();
 
 const { isFullMenuOpen = false } = defineProps<{ isFullMenuOpen?: boolean }>();
+
+const menu = ref<{ toggle: () => void }>();
 </script>
 
 <template>
+  <FullMenu ref="menu" :items="MENU_ITEMS" :disabled="isFullMenuOpen" />
+
   <nav class="navigation-menu">
     <NuxtLink to="/contact" class="navigation-menu__item" @click="closeMenu">
       {{ addBrackets(t("menu.contact") as string) }}
@@ -19,16 +23,15 @@ const { isFullMenuOpen = false } = defineProps<{ isFullMenuOpen?: boolean }>();
       </NuxtLink>
     </div>
 
-    <FullMenu :items="MENU_ITEMS" :disabled="isFullMenuOpen">
-      <button
-        type="button"
-        class="navigation-menu__item navigation-menu__item--right"
-      >
-        {{
-          addBrackets(t(`menu.${isFullMenuOpen ? "close" : "menu"}`) as string)
-        }}
-      </button></FullMenu
+    <button
+      type="button"
+      class="navigation-menu__item navigation-menu__item--right"
+      @click="menu!.toggle"
     >
+      {{
+        addBrackets(t(`menu.${isFullMenuOpen ? "close" : "menu"}`) as string)
+      }}
+    </button>
   </nav>
 </template>
 

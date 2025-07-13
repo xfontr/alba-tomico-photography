@@ -58,12 +58,11 @@ const close = () => {
     open.value = false;
   }, 150);
 };
+
+defineExpose({ toggle });
 </script>
 
 <template>
-  <div @click="toggle">
-    <slot />
-  </div>
   <ClientOnly>
     <Teleport to="#teleports">
       <section v-if="open && !disabled" class="full-menu">
