@@ -1,11 +1,16 @@
 <script lang="ts" setup>
 import { MENU_ITEMS } from "~/configs/constants";
+import type FullMenu from "./FullMenu.vue";
 
 const { t } = useI18n();
+
+const menu = ref<{ toggle: () => void }>();
 </script>
 
 <template>
   <slot />
+
+  <FullMenu ref="menu" :items="MENU_ITEMS" />
 
   <nav class="landing-menu">
     <NuxtLink to="contact" class="landing-menu__item">
@@ -16,11 +21,9 @@ const { t } = useI18n();
       {{ t("meta.title") }}
     </h1>
 
-    <FullMenu :items="MENU_ITEMS">
-      <button type="button" class="landing-menu__item">
-        {{ t("menu.menu_landing") }}
-      </button></FullMenu
-    >
+    <button type="button" class="landing-menu__item" @click="menu!.toggle">
+      {{ t("menu.menu_landing") }}
+    </button>
   </nav>
 </template>
 
@@ -30,10 +33,10 @@ body[data-theme="invert"] .landing-menu {
 }
 
 .landing-menu {
-  position: absolute;
+  border: 10px solid red;
+  position: fixed;
   inset: 0;
   width: 100vw;
-  height: 100vh;
   pointer-events: all;
 
   display: flex;

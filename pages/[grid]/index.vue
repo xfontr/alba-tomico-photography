@@ -13,6 +13,8 @@ import type { PredefinedPath, StaticPath } from "~/types/Path";
 const { content, getFolders } = useContentStore(usePinia());
 const path = usePath();
 
+const repository = ref<HTMLElement>();
+
 const fronts = computed<Image[]>(() => {
   const children = content[path.view.value!]?.children ?? [];
   const isOnlyFrontals = !!(children[0] as Image)?.src;
@@ -84,6 +86,8 @@ onMounted(async () => {
     });
   }
 
+  repository.value!.style.display = isChaoticView.value ? "hidden" : "visible";
+
   if (isChaoticView.value) {
     const preloadImages = async (images: Image[]) => {
       await Promise.all(
@@ -128,6 +132,8 @@ onMounted(async () => {
       imgs = imgs.length ? imgs : document.querySelectorAll(".repository__img");
       imgs.forEach((el) => observer.observe(el));
     }, 150);
+
+    repository.value!.style.display = "visible";
   }
 });
 
@@ -138,7 +144,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section :class="['repository', { 'repository--chaotic': isChaoticView }]">
+  <section
+    ref="repository"
+    :class="['repository', { 'repository--chaotic': isChaoticView }]"
+  >
     <ClientOnly>
       <div
         v-for="(front, key) in isChaoticView ? fronts : frontsWithLayout"
@@ -164,6 +173,7 @@ onBeforeUnmount(() => {
             <img class="repository__img" :src="front.src" :alt="front.alt" />
           </div>
         </NuxtLink>
+
         <img
           v-else-if="front?.alt"
           :style="getLocation(key)"
@@ -180,6 +190,9 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   gap: $distances-s;
+  // width: 100%;
+  // max-width: 100vw;
+  // overflow-x: hidden;
 
   @media (max-width: 1280px) {
     grid-template-columns: repeat(6, 1fr);
@@ -208,12 +221,6 @@ onBeforeUnmount(() => {
     overflow: hidden;
     pointer-events: none;
 
-    &:hover .repository__img--zoom {
-      transform: scale(2.2);
-      outline: none;
-      border: 1px solid #000;
-    }
-
     &--zoom {
       pointer-events: all;
 
@@ -231,17 +238,14 @@ onBeforeUnmount(() => {
     object-fit: cover;
     display: block;
     position: relative;
-    transition: 0.3s;
+    transition: transform 0.35s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transform-origin: center;
+    image-rendering: auto;
+    backface-visibility: hidden;
 
-    &--zoom {
-      transition: transform 0.35s cubic-bezier(0.075, 0.82, 0.165, 1);
-      transition: border 0;
-      transition: outline 0;
-      will-change: transform;
-      transform-origin: center;
-
-      outline: 1px solid #000;
-      border: none;
+    &--zoom:hover {
+      transform: scale(1.4);
+      z-index: 10;
     }
 
     &.in-view {
