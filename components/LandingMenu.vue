@@ -33,7 +33,6 @@ body[data-theme="invert"] .landing-menu {
 }
 
 .landing-menu {
-  border: 10px solid red;
   position: fixed;
   inset: 0;
   width: 100vw;
