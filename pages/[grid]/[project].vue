@@ -49,15 +49,33 @@ onBeforeUnmount(() => {
   left: 0;
   display: flex;
   flex-direction: column;
-  height: 98.5vh;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
   gap: $distances-s;
 
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox, Safari 18.2+, Chromium 121+ */
+
+  &::-webkit-scrollbar {
+    display: none; /* Older Safari and Chromium */
+  }
+
   &__img {
-    width: 100%;
+    @media (min-width: 500px) {
+      height: 100%;
+      width: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
   }
 
   @media (min-width: 500px) {
+    height: 100vh;
     flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 }
 </style>
