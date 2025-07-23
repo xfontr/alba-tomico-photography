@@ -243,6 +243,11 @@ onBeforeUnmount(() => {
     image-rendering: auto;
     backface-visibility: hidden;
 
+    &--zoom {
+      height: fit-content;
+      max-height: 100%;
+    }
+
     &--zoom:hover {
       transform: scale(1.4);
       z-index: 10;
