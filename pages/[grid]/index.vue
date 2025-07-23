@@ -36,45 +36,50 @@ const isChaoticView = computed<boolean>(() =>
 
 const getResponsiveBaseSize = (): number => {
   const width = window.innerWidth;
-  if (width < 480) return 80; // mobile
-  if (width < 768) return 100; // small tablets
-  if (width < 1024) return 120; // medium
-  if (width < 1280) return 135; // large
-  return 150; // desktop+
+  if (width < 480) return 80;
+  if (width < 768) return 100;
+  if (width < 1024) return 120;
+  if (width < 1280) return 135;
+  return 150;
 };
 
 const frontsWithLayout = computed<(Image | undefined)[]>(() => {
   const images = fronts.value;
   const result: (Image | undefined)[] = [];
-
   let imageIndex = 0;
+
   for (const slot of LAYOUT) {
     if (slot === "img") {
       if (imageIndex < images.length) {
         result.push(images[imageIndex]);
         imageIndex++;
-      } else {
-        break;
-      }
+      } else break;
     } else {
       if (imageIndex < images.length) {
         result.push(undefined);
-      } else {
-        break;
-      }
+      } else break;
     }
   }
 
   return result;
 });
 
-const positions = ref<Record<number, ImgHTMLAttributes["style"]>>({});
+const positions = ref<
+  Record<number, ImgHTMLAttributes["style"] & { aspectRatio?: string }>
+>({});
 
-const getLocation = (index: number) => positions.value[index] || {};
+const getLocation = (index: number) => {
+  const pos = positions.value[index];
+  if (!pos) return {};
 
-const canZoom = computed<boolean>(() =>
-  ZOOMABLE_VIEWS.includes(path.view.value!)
-);
+  const { aspectRatio, ...rest } = pos;
+  if (aspectRatio) {
+    return { ...rest, aspectRatio };
+  }
+  return rest;
+};
+
+const canZoom = computed(() => ZOOMABLE_VIEWS.includes(path.view.value!));
 
 let observer: IntersectionObserver;
 
@@ -107,6 +112,14 @@ onMounted(async () => {
 
     await preloadImages(fronts.value);
 
+    // store aspectRatio for each image
+    fronts.value.forEach((img, idx) => {
+      positions.value[idx] = {
+        ...positions.value[idx],
+        aspectRatio: `${img.naturalWidth} / ${img.naturalHeight}`,
+      };
+    });
+
     const w = window.innerWidth;
     const h = (window.innerHeight * fronts.value.length) / (w < 480 ? 2.9 : 2);
     const baseSize = getResponsiveBaseSize();
@@ -121,10 +134,7 @@ onMounted(async () => {
           }
         }
       },
-      {
-        rootMargin: "0px",
-        threshold: 0.2,
-      }
+      { rootMargin: "0px", threshold: 0.2 }
     );
 
     setTimeout(() => {
@@ -174,14 +184,20 @@ onBeforeUnmount(() => {
           </div>
         </NuxtLink>
 
-        <img
+        <!-- NON-CHAOTIC --ZOOM -->
+        <div
           v-else-if="front?.alt"
+          class="repository__img-wrapper"
           :style="getLocation(key)"
-          :class="['repository__img', { 'repository__img--zoom': canZoom }]"
-          :src="front.src"
-          :alt="front.alt"
-        /></div
-    ></ClientOnly>
+        >
+          <img
+            :class="['repository__img', { 'repository__img--zoom': canZoom }]"
+            :src="front.src"
+            :alt="front.alt"
+          />
+        </div>
+      </div>
+    </ClientOnly>
   </section>
 </template>
 
@@ -190,9 +206,6 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   gap: $distances-s;
-  // width: 100%;
-  // max-width: 100vw;
-  // overflow-x: hidden;
 
   @media (max-width: 1280px) {
     grid-template-columns: repeat(6, 1fr);
@@ -244,8 +257,8 @@ onBeforeUnmount(() => {
     backface-visibility: hidden;
 
     &--zoom {
-      height: fit-content;
-      max-height: 100%;
+      height: 100% !important;
+      object-fit: contain;
     }
 
     &--zoom:hover {
@@ -298,6 +311,19 @@ onBeforeUnmount(() => {
     text-align: center;
     color: $color-primary;
     z-index: 1;
+  }
+
+  &__img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4; // fallback
+    overflow: visible;
+
+    .repository__img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 </style>
