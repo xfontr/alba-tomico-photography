@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script lang="ts" setup>
 import type { ImgHTMLAttributes } from "vue";
 import {
@@ -72,7 +73,7 @@ const getLocation = (index: number) => {
   const pos = positions.value[index];
   if (!pos) return {};
 
-  const { aspectRatio, ...rest } = pos;
+  const { aspectRatio, ...rest } = pos as any;
   if (aspectRatio) {
     return { ...rest, aspectRatio };
   }
@@ -115,7 +116,7 @@ onMounted(async () => {
     // store aspectRatio for each image
     fronts.value.forEach((img, idx) => {
       positions.value[idx] = {
-        ...positions.value[idx],
+        ...(positions.value[idx] as any),
         aspectRatio: `${img.naturalWidth} / ${img.naturalHeight}`,
       };
     });
@@ -123,7 +124,7 @@ onMounted(async () => {
     const w = window.innerWidth;
     const h = (window.innerHeight * fronts.value.length) / (w < 480 ? 2.9 : 2);
     const baseSize = getResponsiveBaseSize();
-    positions.value = generateMatterLayout(fronts.value, w, h, baseSize);
+    positions.value = generateMatterLayout(fronts.value, w, h, baseSize) as any;
     document.body.style.height = h + "px";
 
     observer = new IntersectionObserver(
