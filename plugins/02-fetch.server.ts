@@ -16,62 +16,81 @@ export default defineNuxtPlugin(async () => {
 
   const cache: Partial<Record<PredefinedPath, ListFileResponse>> = {};
 
-  await Promise.all(
-    STATIC_VIEWS.map(async (view) => {
-      cache[view] = await api.getPath(view);
-    })
-  );
+  const getAndTransformResources = async () => {
+    await Promise.all(
+      STATIC_VIEWS.map(async (view) => {
+        cache[view] = await api.getPath(view);
+      })
+    );
 
-  await Promise.all(
-    DYNAMIC_VIEWS.map(async (view) => {
-      cache[view] = await api.getFolders(view);
-    })
-  );
+    await Promise.all(
+      DYNAMIC_VIEWS.map(async (view) => {
+        cache[view] = await api.getFolders(view);
+      })
+    );
 
-  STATIC_VIEWS.forEach((view) => {
-    const current = cache[view];
-    if (!current) return;
-
-    const imgs = Images(current.filter(isFileObject).map(Image));
-    imgs.fillAlts(locale, t("global.default_alt") as string);
-
-    const entry = Entry({
-      folderPath: view,
-      name: view,
-      type: "folder",
-    });
-
-    entry.addChildren(...imgs.getImages());
-    content.setView(view, entry.get());
-  });
-
-  await Promise.all(
-    DYNAMIC_VIEWS.map(async (view) => {
+    STATIC_VIEWS.forEach((view) => {
       const current = cache[view];
       if (!current) return;
 
-      const entries = Entries(current.filter(isFolderObject).map(Entry));
+      const imgs = Images(current.filter(isFileObject).map(Image));
+      imgs.fillAlts(locale, t("global.default_alt") as string);
 
-      await Promise.all(
-        entries.instances.map(async (instance) => {
-          const files = await api.getPath(instance.get().path);
-
-          const imgs = Images(files.filter(isFileObject).map(Image));
-          imgs.fillAlts(locale, t("global.default_alt") as string);
-
-          instance.addChildren(...imgs.getImages());
-        })
-      );
-
-      const mainEntry = Entry({
+      const entry = Entry({
         folderPath: view,
         name: view,
         type: "folder",
       });
 
-      mainEntry.addChildren(...entries.getEntries());
+      entry.addChildren(...imgs.getImages());
+      content.setView(view, entry.get());
+    });
 
-      content.setView(view, mainEntry.get());
-    })
-  );
+    await Promise.all(
+      DYNAMIC_VIEWS.map(async (view) => {
+        const current = cache[view];
+        if (!current) return;
+
+        const entries = Entries(current.filter(isFolderObject).map(Entry));
+
+        await Promise.all(
+          entries.instances.map(async (instance) => {
+            const files = await api.getPath(instance.get().path);
+
+            const imgs = Images(files.filter(isFileObject).map(Image));
+            imgs.fillAlts(locale, t("global.default_alt") as string);
+
+            instance.addChildren(...imgs.getImages());
+          })
+        );
+
+        const mainEntry = Entry({
+          folderPath: view,
+          name: view,
+          type: "folder",
+        });
+
+        mainEntry.addChildren(...entries.getEntries());
+
+        content.setView(view, mainEntry.get());
+      })
+    );
+  };
+
+  const MAX_RETRIES = 3;
+
+  let retries = 0;
+
+  while (retries < MAX_RETRIES) {
+    try {
+      await getAndTransformResources();
+      return;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_) {
+      retries++;
+      await new Promise((res) => setTimeout(res, retries * 1500));
+    }
+  }
+
+  throw createError({ statusCode: 500 });
 });
