@@ -14,7 +14,7 @@ const Entry = (folder: EntryData): EntryInstance => {
     index: -1,
   };
 
-  entry.index = getIndex(entry.name);
+  entry.index = getIndex(folder.name);
 
   const addChildren: EntryInstance["addChildren"] = (...children) => {
     entry.children ??= [];
