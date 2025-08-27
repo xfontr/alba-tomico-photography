@@ -9,6 +9,12 @@ const { t } = useI18n();
 const message = computed<string>(
   () => props.error.statusMessage ?? (t("error.default") as string)
 );
+
+onMounted(() => {
+  setTimeout(() => {
+    window.dispatchEvent(new ErrorEvent("error"));
+  }, 1_000);
+});
 </script>
 
 <template>
