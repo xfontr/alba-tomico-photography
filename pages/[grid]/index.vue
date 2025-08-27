@@ -22,9 +22,10 @@ const fronts = computed<Image[]>(() => {
 
   if (!isOnlyFrontals) {
     return (
-      getFolders(path.view.value!)
-        ?.flatMap((child) => child.children?.filter(({ front }) => front))
-        .flat() ?? []
+      (getFolders(path.view.value!)?.map((child) => ({
+        ...child.children?.find(({ front }) => front),
+        index: child.index,
+      })) as Image[]) ?? []
     );
   }
 
